@@ -1,13 +1,51 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+}
+
+model Usuario {
+  id       Int    @id @default(autoincrement())
+  nome     String
+  email    String @unique
+  senha    String
+  criadoEm DateTime @default(now())
+}
+
+model Time {
+  id        Int       @id @default(autoincrement())
+  nome      String    @unique
+  cidade    String
+  escudo    String?
+  criadoEm  DateTime  @default(now())
+
+  jogadores Jogador[]
+  mandante  Partida[] @relation("Mandante")
+  visitante Partida[] @relation("Visitante")
+}
+
+model Jogador {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  posicao  String
+  numero   Int
+  timeId   Int
+  time     Time     @relation(fields: [timeId], references: [id])
+  criadoEm DateTime @default(now())
+}
+
+model Partida {
+  id           Int      @id @default(autoincrement())
+  mandanteId   Int
+  visitanteId  Int
+  golsMandante Int      @default(0)
+  golsVisitante Int     @default(0)
+  status       String   @default("agendada")
+  dataPartida  DateTime
+  criadoEm     DateTime @default(now())
+
+  mandante     Time     @relation("Mandante", fields: [mandanteId], references: [id])
+  visitante    Time     @relation("Visitante", fields: [visitanteId], references: [id])
 }
