@@ -8,7 +8,7 @@ const { PrismaClient } = require("@prisma/client")
 const adapter = new PrismaMariaDb(process.env.DATABASE_URL)
 const prisma = new PrismaClient({ adapter })
 
-export default prisma 
+export default prisma
 
 
 
