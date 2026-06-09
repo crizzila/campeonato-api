@@ -9,4 +9,7 @@ router.get("/classificacao", classificacao)
 router.post("/", authMiddleware, criarPartida)
 router.put("/:id", authMiddleware, atualizarPlacar)
 
-export default router
+export default router 
+
+
+

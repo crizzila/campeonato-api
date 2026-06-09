@@ -2,6 +2,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import prisma from "../lib/prisma.js"
 
+
 export async function register(req, res) {
   const { nome, email, senha } = req.body
 
@@ -15,15 +16,16 @@ export async function register(req, res) {
       return res.status(409).json({ erro: "Email já cadastrado" })
     }
 
-    const senhaHash = await bcrypt.hash(senha, 10)
+    const senhaHash = await bcrypt.hash(senha, 10) 
     const usuario = await prisma.usuario.create({
       data: { nome, email, senha: senhaHash },
     });
 
     return res.status(201).json({ mensagem: "Usuário criado com sucesso", id: usuario.id })
-  } catch (error) {
-    return res.status(500).json({ erro: "Erro interno do servidor" })
-  }
+  }  catch (error) {
+    console.error(error)
+    return res.status(500).json({ erro: error.message })
+}
 }
 
 export async function login(req, res) {
